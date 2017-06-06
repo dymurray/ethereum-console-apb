@@ -3,6 +3,16 @@
   openshift_v1_project:
     name: '{{ project_name }}'
 
+- name: create persistent volume claims
+  k8s_v1_persistent_volume_claim:
+    name: keystore
+    namespace: '{{ project_name }}'
+    state: present
+    access_modes:
+      - ReadWriteOnce
+    resources_requests:
+      storage: 5Gi
+
 - name: create ethereum service
   k8s_v1_service:
     name: console
@@ -54,4 +64,8 @@
         - container_port: 30303
           name: console-30303
           protocol: TCP
+      volume_munts:
+      - mount_path: /home/apb/.ethereum
+        name: keystore
+      working_dir: /
     restart_policy: Always
