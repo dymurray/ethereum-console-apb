@@ -9,3 +9,11 @@ parameters:
     description: Number of ethereum pods to spawn
     type: int
     default: 5
+  - name: mining
+    description: Enable mining for ethereum pods
+    type: boolean
+    default: False
+  - name: test
+    description: Enable test network
+    type: boolean
+    default: False
