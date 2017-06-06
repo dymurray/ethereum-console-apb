@@ -28,7 +28,7 @@
     labels:
       app: '{{ project_name }}'
       service: console
-    replicas: 10
+    replicas: '{{ replicas }}'
     selector:
       app: '{{ project_name }}'
       service: console
