@@ -1,0 +1,55 @@
+---
+- name: create namespace
+  openshift_v1_project:
+    name: '{{ project_name }}'
+
+- name: create ethereum service
+  k8s_v1_service:
+    name: console
+    namespace: '{{ project_name }}'
+    state: present
+    selector:
+      app: '{{ project_name }}'
+    ports:
+      - name: console-8545
+        port: 8545
+        target_port: 8545
+        protocol: TCP
+      - name: console-30303
+        port: 30303
+        target_port: 30303
+        protocol: TCP
+
+- name: create ethereum dc
+  openshift_v1_deployment_config:
+    name: console
+    namespace: '{{ project_name }}'
+    state: present
+    labels:
+      app: '{{ project_name }}'
+      service: console
+    replicas: 10
+    selector:
+      app: '{{ project_name }}'
+      service: console
+    spec_template_metadata_labels:
+      app: '{{ project_name }}'
+      service: console
+    containers:
+    - command:
+      - /usr/local/bin/geth
+      - --fast
+      - --cache=512
+      - --rpc
+      - --rpcaddr=0.0.0.0
+      image: "docker.io/ethereum/client-go"
+      name: console
+      strategy_type: Rolling
+      ports:
+        - container_port: 8545
+          name: console-8545
+          protocol: TCP
+        - container_port: 30303
+          name: console-30303
+          protocol: TCP
+    restart_policy: Always

@@ -1,0 +1,7 @@
+- name: ethereum-console-apb playbook to unbind the application
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  roles:
+  - role: unbind-ethereum-console-apb
+    playbook_debug: false

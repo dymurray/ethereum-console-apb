@@ -1,0 +1,7 @@
+- name: ethereum-console-apb playbook to deprovision the application
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  roles:
+  - role: deprovision-ethereum-console-apb
+    playbook_debug: false
