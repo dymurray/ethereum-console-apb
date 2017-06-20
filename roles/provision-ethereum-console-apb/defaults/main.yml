@@ -1,5 +1,5 @@
 ---
-project_name: ethereum-console
+project_name: "{{ lookup('env', 'NAMESPACE') | default('ethereum-console', true) }}"
 replicas: "{{ lookup('env', 'REPLICAS') | default('5', true) }}"
 mining: "{{ lookup('env', 'MINING') | default(false, true) }}"
 test_network: "{{ lookup('env', 'TEST_NETWORK') | default(false, true) }}"
