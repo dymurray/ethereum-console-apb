@@ -15,36 +15,49 @@
 
 - name: create ethereum service
   k8s_v1_service:
-    name: console
+    name: ethereum
     namespace: '{{ project_name }}'
     state: present
     selector:
       app: '{{ project_name }}'
     ports:
-      - name: console-8545
+      - name: ethereum-8545
         port: 8545
         target_port: 8545
         protocol: TCP
-      - name: console-30303
+      - name: ethereum-30303
         port: 30303
         target_port: 30303
         protocol: TCP
 
+- name: create Ethereum route
+  openshift_v1_route:
+    name: ethereum
+    namespace: '{{ project_name }}'
+    spec_port_target_port: ethereum-8545
+    labels:
+      app: '{{ project_name }}'
+      service: ethereum
+    to_name: ethereum
+    state: present
+  register: route
+
+
 - name: create ethereum dc
   openshift_v1_deployment_config:
-    name: console
+    name: ethereum
     namespace: '{{ project_name }}'
     state: present
     labels:
       app: '{{ project_name }}'
-      service: console
+      service: ethereum
     replicas: '{{ replicas }}'
     selector:
       app: '{{ project_name }}'
-      service: console
+      service: ethereum
     spec_template_metadata_labels:
       app: '{{ project_name }}'
-      service: console
+      service: ethereum
     containers:
     - command:
       - /usr/local/bin/geth
@@ -55,14 +68,14 @@
       - "{{ '--mine' if mining else '' }}"
       - "{{ '--testnet' if test_network else '' }}"
       image: "docker.io/ethereum/client-go"
-      name: console
+      name: ethereum
       strategy_type: Rolling
       ports:
         - container_port: 8545
-          name: console-8545
+          name: ethereum-8545
           protocol: TCP
         - container_port: 30303
-          name: console-30303
+          name: ethereum-30303
           protocol: TCP
       volume_munts:
       - mount_path: /home/apb/.ethereum
