@@ -3,7 +3,7 @@
   openshift_v1_project:
     name: '{{ project_name }}'
 
-- name: create persistent volume claims
+- name: create persistent volume claim
   k8s_v1_persistent_volume_claim:
     name: keystore
     namespace: '{{ project_name }}'
@@ -13,7 +13,7 @@
     resources_requests:
       storage: 5Gi
 
-- name: create ethereum service
+- name: create Ethereum service
   k8s_v1_service:
     name: ethereum
     namespace: '{{ project_name }}'
@@ -42,8 +42,7 @@
     state: present
   register: route
 
-
-- name: create ethereum dc
+- name: create Ethereum deployment config
   openshift_v1_deployment_config:
     name: ethereum
     namespace: '{{ project_name }}'
@@ -65,7 +64,8 @@
       - --cache=512
       - --rpc
       - --rpcaddr=0.0.0.0
-      - "{{ '--mine' if mining else '' }}"
+      - "{{ '--mine' if mine else '' }}"
+      - "{{ '--etherbase=' if etherbase else '' }}{{ etherbase if etherbase else '' }}"
       - "{{ '--testnet' if test_network else '' }}"
       image: "docker.io/ethereum/client-go"
       name: ethereum

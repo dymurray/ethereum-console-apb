@@ -6,7 +6,7 @@ bindable: false
 async: optional
 metadata:
   displayName: "Ethereum Console"
-  longDescription: "An apb that deploys Ethereum Blockchain Console applications with full JSON RPC"
+  longDescription: "An apb that deploys Ethereum Blockchain Console applications with JSON RPC interface"
   imageUrl: "https://www.ethereum.org/images/logos/ETHEREUM-ICON_Black.png"
   documentationUrl: "https://github.com/ethereum/go-ethereum/wiki/geth"
 parameters:
@@ -22,4 +22,7 @@ parameters:
       title: Enable test network
       type: boolean
       default: False
+  - etherbase:
+      title: Public address for block mining rewards
+      type: string
 required: {}
