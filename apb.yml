@@ -1,4 +1,3 @@
-id: 1771ff2a-7f23-42e5-8d99-87538ab35366
 name: ethereum-console-apb
 image: dymurray/ethereum-console-apb
 description: "Ethereum APB implementation"
@@ -9,20 +8,26 @@ metadata:
   longDescription: "An apb that deploys Ethereum Blockchain Console applications with JSON RPC interface"
   imageUrl: "https://www.ethereum.org/images/logos/ETHEREUM-ICON_Black.png"
   documentationUrl: "https://github.com/ethereum/go-ethereum/wiki/geth"
-parameters:
-  - replicas:
-      title: Number of Ethereum pods to Spawn
-      type: int
-      default: 5
-  - mine:
-      title: Enable Mining
-      type: boolean
-      default: False
-  - test_network:
-      title: Enable test network
-      type: boolean
-      default: False
-  - etherbase:
-      title: Public address for block mining rewards
-      type: string
-required: {}
+plans:
+  - name: default
+    description: A single Ethereum instance
+    free: True
+    metadata:
+      displayName: Default
+      cost: $0.00
+    parameters:
+      - name: replicas
+        title: Number of Ethereum pods to Spawn
+        type: int
+        default: 5
+      - name: mine
+        title: Enable Mining
+        type: boolean
+        default: False
+      - name: test_network
+        title: Enable test network
+        type: boolean
+        default: False
+      - name: etherbase
+        title: Public address for block mining rewards
+        type: string
